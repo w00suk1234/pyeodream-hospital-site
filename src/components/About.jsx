@@ -2,9 +2,9 @@ import { ArrowUpRight } from 'lucide-react';
 import { brandPoints, process } from '../data/clinicData';
 import MotionSection from './MotionSection';
 
-export default function About() {
+export default function About({ onNavigate }) {
   return (
-    <MotionSection id="about" className="bg-porcelain py-24">
+    <MotionSection id="about" className="bg-porcelain pb-24 pt-32">
       <div className="section-shell grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
         <div>
           <p className="text-sm font-bold tracking-[0.24em] text-gold">BRAND PHILOSOPHY</p>
@@ -13,17 +13,21 @@ export default function About() {
             <span className="block">움직임의 이유를 먼저 봅니다.</span>
           </h2>
           <p className="mt-6 text-base leading-8 text-ink/65">
-            블로그 전반에서 반복되는 펴드림의 말투는 차분합니다. 과장보다 “현재 상태를 먼저 확인”하고,
-            “무리하지 않는 범위”에서 접근하며, “변화를 확인”하는 흐름을 강조합니다. 홈페이지도 이 철학을
-            중심에 두고 예약까지 자연스럽게 이어지도록 설계했습니다.
+            펴드림의 핵심은 과장된 치료 약속이 아니라 현재 상태를 먼저 확인하는 태도입니다.
+            자세, 보행, 관절 가동범위, 일상 움직임을 함께 보고 무리하지 않는 범위에서 관리 방향을 정합니다.
           </p>
-          <a
-            href="#ai-desk"
+          <p className="mt-4 text-base leading-8 text-ink/65">
+            블로그에서 반복되는 “평가 → 맞춤 → 변화 확인”의 흐름을 홈페이지 구조에도 반영했습니다.
+            처음 방문하는 분도 자신의 상태와 다음 행동을 빠르게 이해할 수 있게 설계했습니다.
+          </p>
+          <button
+            type="button"
+            onClick={() => onNavigate('ai')}
             className="focus-ring mt-8 inline-flex items-center gap-2 rounded-full border border-mist bg-white px-5 py-3 text-sm font-semibold text-navy transition hover:border-gold"
           >
             내 상태 빠르게 분류하기
             <ArrowUpRight size={17} />
-          </a>
+          </button>
         </div>
 
         <div className="grid gap-5">

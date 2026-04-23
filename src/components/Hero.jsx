@@ -1,10 +1,10 @@
 import { ArrowRight, CalendarDays, CheckCircle2, ClipboardCheck, MessageSquareText, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { brandPoints, clinic } from '../data/clinicData';
+import { brandPoints } from '../data/clinicData';
 
-export default function Hero() {
+export default function Hero({ onNavigate }) {
   return (
-    <section id="top" className="relative overflow-hidden pb-18 pt-28 lg:pb-24 lg:pt-36">
+    <section id="top" className="relative overflow-hidden pb-20 pt-32 lg:pb-24 lg:pt-36">
       <div className="absolute inset-0 soft-grid opacity-55" />
       <div className="section-shell relative grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
         <motion.div
@@ -25,25 +25,28 @@ export default function Hero() {
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <a
-              href="#ai-desk"
+            <button
+              type="button"
+              onClick={() => onNavigate('ai')}
               className="focus-ring inline-flex h-14 items-center justify-center gap-2 rounded-full bg-navy px-7 text-base font-semibold text-white shadow-clinic transition hover:bg-ink"
             >
               AI 빠른 접수 시작
               <ArrowRight size={18} />
-            </a>
-            <a
-              href="#services"
+            </button>
+            <button
+              type="button"
+              onClick={() => onNavigate('services')}
               className="focus-ring inline-flex h-14 items-center justify-center gap-2 rounded-full border border-mist bg-white/80 px-7 text-base font-semibold text-navy transition hover:border-gold"
             >
               관리 프로그램 보기
-            </a>
-            <a
-              href="#contact"
+            </button>
+            <button
+              type="button"
+              onClick={() => onNavigate('contact')}
               className="focus-ring inline-flex h-14 items-center justify-center gap-2 rounded-full border border-transparent px-4 text-base font-semibold text-ink/70 transition hover:text-navy"
             >
               위치·시간 안내
-            </a>
+            </button>
           </div>
 
           <div className="mt-9 grid max-w-2xl gap-3 sm:grid-cols-3">
@@ -73,7 +76,9 @@ export default function Hero() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-sm font-semibold text-white/60">PYEODREAM CARE FLOW</p>
-                  <h2 className="mt-3 text-2xl font-semibold leading-tight md:text-3xl">평가에서 변화 확인까지 정돈되는 1:1 케어</h2>
+                  <h2 className="mt-3 text-2xl font-semibold leading-tight md:text-3xl">
+                    평가에서 변화 확인까지 정돈되는 1:1 케어
+                  </h2>
                 </div>
                 <ClipboardCheck className="shrink-0 text-gold" size={34} />
               </div>
