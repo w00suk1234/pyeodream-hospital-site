@@ -15,7 +15,7 @@ const initialState = {
   note: '',
 };
 
-export default function AIReservationAssistant({ compact = false }) {
+export default function AIReservationAssistant({ compact = false, onNavigate }) {
   const [stepIndex, setStepIndex] = useState(0);
   const [answers, setAnswers] = useState(initialState);
   const [status, setStatus] = useState('idle');
@@ -54,10 +54,6 @@ export default function AIReservationAssistant({ compact = false }) {
     setStepIndex((index) => index + 1);
   };
 
-  const updateNote = (event) => {
-    setAnswers((value) => ({ ...value, note: event.target.value }));
-  };
-
   const reset = () => {
     setAnswers(initialState);
     setStepIndex(0);
@@ -65,13 +61,21 @@ export default function AIReservationAssistant({ compact = false }) {
     setResult(null);
   };
 
+  const goContact = () => {
+    if (onNavigate) {
+      onNavigate('contact');
+    } else {
+      window.location.hash = '#contact';
+    }
+  };
+
   const panel = (
-    <div className="glass-panel overflow-hidden rounded-[2rem]">
+    <div className="glass-panel overflow-hidden rounded-[1.75rem]">
       <div className="border-b border-mist bg-[linear-gradient(135deg,#122033,#18324f)] p-6 text-white">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-sm font-bold tracking-[0.2em] text-gold">AI FRONT DESK</p>
-            <h2 className="mt-3 text-3xl font-semibold">AI 빠른 접수 데스크</h2>
+            <h2 className="mt-3 text-2xl font-semibold md:text-3xl">AI 빠른 접수 데스크</h2>
             <p className="mt-3 max-w-xl text-sm leading-6 text-white/68">
               진단이 아닌 예약 전 안내입니다. 방문 목적을 정리해 상담, 예약, 전화 문의로 바로 연결합니다.
             </p>
@@ -93,12 +97,14 @@ export default function AIReservationAssistant({ compact = false }) {
         </div>
       )}
 
-      <div className="p-5 md:p-7">
-        <div className="mb-7 flex items-center gap-2">
+      <div className="p-5 md:p-6">
+        <div className="mb-6 flex items-center gap-2">
           {assistantSteps.map((item, index) => (
             <span
               key={item.id}
-              className={`h-1.5 flex-1 rounded-full ${index <= Math.min(stepIndex, assistantSteps.length - 1) ? 'bg-gold' : 'bg-mist'}`}
+              className={`h-1.5 flex-1 rounded-full ${
+                index <= Math.min(stepIndex, assistantSteps.length - 1) ? 'bg-gold' : 'bg-mist'
+              }`}
             />
           ))}
         </div>
@@ -112,9 +118,9 @@ export default function AIReservationAssistant({ compact = false }) {
               exit={{ opacity: 0, x: -18 }}
               transition={{ duration: 0.25 }}
             >
-              <div className="rounded-3xl border border-mist bg-white p-5 shadow-soft">
+              <div className="rounded-[1.35rem] border border-mist bg-white p-5 shadow-soft">
                 <p className="text-sm font-bold tracking-[0.18em] text-gold">{step.eyebrow}</p>
-                <h3 className="mt-3 text-2xl font-semibold leading-tight text-ink">{step.question}</h3>
+                <h3 className="mt-3 text-xl font-semibold leading-tight text-ink md:text-2xl">{step.question}</h3>
                 <p className="mt-3 text-sm leading-6 text-ink/54">
                   선택지만 눌러도 접수가 진행됩니다. 필요한 경우 한 줄 메모만 남겨주세요.
                 </p>
@@ -123,13 +129,13 @@ export default function AIReservationAssistant({ compact = false }) {
               {step.id === 'area' && (
                 <textarea
                   value={answers.note}
-                  onChange={updateNote}
-                  placeholder="짧게 적어도 괜찮습니다. 예: 아침 첫발이 아파요, 팔이 잘 안 올라가요"
+                  onChange={(event) => setAnswers((value) => ({ ...value, note: event.target.value }))}
+                  placeholder="예: 아침 첫발이 아파요, 팔이 잘 안 올라가요"
                   className="focus-ring mt-5 min-h-24 w-full resize-none rounded-2xl border border-mist bg-white px-4 py-3 text-sm leading-6 text-ink shadow-soft placeholder:text-ink/35"
                 />
               )}
 
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 {step.options.map((option) => (
                   <button
                     key={option}
@@ -163,7 +169,7 @@ export default function AIReservationAssistant({ compact = false }) {
             >
               <p className="text-sm font-bold tracking-[0.18em] text-gold">접수 요약</p>
               <h3 className="mt-3 text-2xl font-semibold text-ink">방문 목적이 정리되었습니다.</h3>
-              <div className="mt-6 grid gap-3 rounded-3xl border border-mist bg-white p-5 shadow-soft">
+              <div className="mt-6 grid gap-3 rounded-[1.35rem] border border-mist bg-white p-5 shadow-soft">
                 {Object.entries({
                   방문: answers.visitType,
                   목적: answers.purpose,
@@ -179,16 +185,17 @@ export default function AIReservationAssistant({ compact = false }) {
               </div>
 
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href="#contact"
-                  className="focus-ring inline-flex h-13 items-center justify-center gap-2 rounded-full bg-navy px-6 font-semibold text-white shadow-soft"
+                <button
+                  type="button"
+                  onClick={goContact}
+                  className="focus-ring inline-flex h-12 items-center justify-center gap-2 rounded-full bg-navy px-6 font-semibold text-white shadow-soft"
                 >
                   <CalendarCheck size={18} />
                   예약 안내 보기
-                </a>
+                </button>
                 <a
                   href={`tel:${clinic.phone}`}
-                  className="focus-ring inline-flex h-13 items-center justify-center gap-2 rounded-full border border-mist bg-white px-6 font-semibold text-navy"
+                  className="focus-ring inline-flex h-12 items-center justify-center gap-2 rounded-full border border-mist bg-white px-6 font-semibold text-navy"
                 >
                   <PhoneCall size={18} />
                   전화 문의
@@ -196,7 +203,7 @@ export default function AIReservationAssistant({ compact = false }) {
                 <button
                   type="button"
                   onClick={reset}
-                  className="focus-ring inline-flex h-13 items-center justify-center gap-2 rounded-full border border-mist bg-white px-6 font-semibold text-ink/64"
+                  className="focus-ring inline-flex h-12 items-center justify-center gap-2 rounded-full border border-mist bg-white px-6 font-semibold text-ink/64"
                 >
                   <RotateCcw size={18} />
                   다시 접수
@@ -205,7 +212,7 @@ export default function AIReservationAssistant({ compact = false }) {
 
               <p className="mt-5 text-sm leading-6 text-ink/52">
                 {status === 'done' && result?.mode === 'mock'
-                  ? `프론트 mock 접수번호 ${result.leadId}로 저장되었습니다.`
+                  ? `테스트용 접수번호 ${result.leadId}가 생성되었습니다. 아직 DB에는 저장되지 않습니다.`
                   : '실제 API 연결 시 이 요약 정보가 FastAPI 예약 엔드포인트로 전송됩니다.'}
               </p>
             </motion.div>
@@ -227,17 +234,16 @@ export default function AIReservationAssistant({ compact = false }) {
   }
 
   return (
-    <MotionSection id="ai-desk" className="py-24">
+    <MotionSection id="ai-desk" className="pb-24 pt-32">
       <div className="section-shell grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-center">
         <div>
           <p className="text-sm font-bold tracking-[0.24em] text-gold">AI RESERVATION</p>
-          <h2 className="mt-5 text-4xl font-semibold leading-tight text-ink md:text-5xl">
-            대화가 길어지기 전에
-            <span className="block">예약에 필요한 것만 묻습니다.</span>
+          <h2 className="mt-4 text-3xl font-semibold leading-tight text-ink md:text-4xl lg:text-5xl">
+            예약에 필요한 것만 빠르게 확인합니다.
           </h2>
-          <p className="mt-6 text-base leading-8 text-ink/65">
-            초진/재진, 방문 목적, 불편 부위, 희망 시간대를 빠르게 분류합니다. 질병을 단정하지 않고,
-            필요한 경우 전화 문의 또는 의료기관 상담을 우선 안내합니다.
+          <p className="mt-5 max-w-xl text-base leading-8 text-ink/62">
+            초진/재진, 방문 목적, 불편 부위, 희망 시간대를 짧게 분류합니다.
+            질병을 단정하지 않고 필요한 경우 전화 문의 또는 의료기관 상담을 우선 안내합니다.
           </p>
         </div>
         {panel}
